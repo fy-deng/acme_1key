@@ -28,8 +28,8 @@ red "不支持你当前系统，请选择使用Ubuntu,Debian,Centos系统" && ex
 fi
 
 v4v6(){
-v6=$(curl -s6m6 ip.p3terx.com -k | sed -n 1p)
-v4=$(curl -s4m6 ip.p3terx.com -k | sed -n 1p)
+v6=$(curl -s6m6 api64.ipify.org -k)
+v4=$(curl -s4m6 api64.ipify.org -k)
 }
 
 acme1(){
@@ -108,9 +108,7 @@ yellow "公钥文件crt路径如下，可直接复制"
 green "/root/ygkkkca/cert.crt"
 yellow "密钥文件key路径如下，可直接复制"
 green "/root/ygkkkca/private.key"
-
 echo $ym > /root/ygkkkca/ca.log
-
 if [[ -f '/usr/local/bin/hysteria' ]]; then
 blue "检测到hysteria代理协议，此证书将自动应用"
 fi
