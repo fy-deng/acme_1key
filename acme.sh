@@ -253,6 +253,7 @@ esac
 else
 yellow "检测到正在使用WARP接管VPS出站，现执行临时关闭"
 systemctl stop wg-quick@wgcf >/dev/null 2>&1
+kill -15 $(pgrep warp-go) >/dev/null 2>&1 && sleep 2
 green "WARP已临时闭关"
 ab="1.选择独立80端口模式申请证书（仅需域名，小白推荐），安装过程中将强制释放80端口\n2.选择DNS API模式申请证书（需域名、ID、Key），自动识别单域名与泛域名\n0.返回上一层\n 请选择："
 readp "$ab" cd
@@ -263,6 +264,9 @@ case "$cd" in
 esac
 yellow "现恢复原先WARP接管VPS出站设置，现执行WARP开启"
 systemctl start wg-quick@wgcf >/dev/null 2>&1
+systemctl restart warp-go >/dev/null 2>&1
+systemctl enable warp-go >/dev/null 2>&1
+systemctl start warp-go >/dev/null 2>&1
 green "WARP已恢复开启"
 fi
 }
