@@ -88,8 +88,8 @@ cd acme.sh-master >/dev/null 2>&1
 ./acme.sh --install >/dev/null 2>&1
 cd
 curl https://get.acme.sh | sh -s email=$Aemail
-[[ -n $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && green "安装acme.sh证书申请程序成功" || red "安装acme.sh证书申请程序失败" 
-bash /root/.acme.sh/acme.sh --upgrade --use-wget --auto-upgrade
+[[ -n $(~/.acme.sh/acme.sh -v 2>/dev/null) ]] && green "安装acme.sh证书申请程序成功" || red "安装acme.sh证书申请程序失败" 
+bash ~/.acme.sh/acme.sh --upgrade --use-wget --auto-upgrade
 }
 
 checktls(){
@@ -102,7 +102,7 @@ yellow "建议二：更换下当前本地网络IP环境，再尝试执行脚本"
 }
 if [[ -f /root/ygkkkca/cert.crt && -f /root/ygkkkca/private.key ]] && [[ -s /root/ygkkkca/cert.crt && -s /root/ygkkkca/private.key ]]; then
 sed -i '/--cron/d' /etc/crontab
-echo "0 0 * * * root bash /root/.acme.sh/acme.sh --cron -f >/dev/null 2>&1" >> /etc/crontab
+echo "0 0 * * * root bash ~/.acme.sh/acme.sh --cron -f >/dev/null 2>&1" >> /etc/crontab
 green "域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /root/ygkkkca文件夹内" 
 yellow "公钥文件crt路径如下，可直接复制"
 green "/root/ygkkkca/cert.crt"
@@ -131,11 +131,11 @@ bash ~/.acme.sh/acme.sh --install-cert -d ${ym} --key-file /root/ygkkkca/private
 }
 
 checkacmeca(){
-nowca=`bash /root/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'`
+nowca=`bash ~/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'`
 if [[ $nowca == $ym ]]; then
 red "经检测，输入的域名已有证书申请记录，不用重复申请"
 red "证书申请记录如下："
-bash /root/.acme.sh/acme.sh --list
+bash ~/.acme.sh/acme.sh --list
 yellow "如果一定要重新申请，请先执行删除证书选项" && exit
 fi
 }
@@ -147,10 +147,10 @@ checkacmeca
 domainIP=$(curl -s ipget.net/?ip="$ym")
 wro
 if [[ $domainIP = $v4 ]]; then
-bash /root/.acme.sh/acme.sh  --issue -d ${ym} --standalone -k ec-256 --server letsencrypt --insecure
+bash ~/.acme.sh/acme.sh  --issue -d ${ym} --standalone -k ec-256 --server letsencrypt --insecure
 fi
 if [[ $domainIP = $v6 ]]; then
-bash /root/.acme.sh/acme.sh  --issue -d ${ym} --standalone -k ec-256 --server letsencrypt --listen-v6 --insecure
+bash ~/.acme.sh/acme.sh  --issue -d ${ym} --standalone -k ec-256 --server letsencrypt --listen-v6 --insecure
 fi
 installCA
 checktls
@@ -184,10 +184,10 @@ export CF_Key="$GAK"
 readp "请输入登录Cloudflare的注册邮箱地址：" CFemail
 export CF_Email="$CFemail"
 if [[ $domainIP = $v4 ]]; then
-bash /root/.acme.sh/acme.sh --issue --dns dns_cf -d ${ym} -k ec-256 --server letsencrypt --insecure
+bash ~/.acme.sh/acme.sh --issue --dns dns_cf -d ${ym} -k ec-256 --server letsencrypt --insecure
 fi
 if [[ $domainIP = $v6 ]]; then
-bash /root/.acme.sh/acme.sh --issue --dns dns_cf -d ${ym} -k ec-256 --server letsencrypt --listen-v6 --insecure
+bash ~/.acme.sh/acme.sh --issue --dns dns_cf -d ${ym} -k ec-256 --server letsencrypt --listen-v6 --insecure
 fi
 ;;
 2 )
@@ -196,10 +196,10 @@ export DP_Id="$DPID"
 readp "请复制腾讯云DNSPod的DP_Key：" DPKEY
 export DP_Key="$DPKEY"
 if [[ $domainIP = $v4 ]]; then
-bash /root/.acme.sh/acme.sh --issue --dns dns_dp -d ${ym} -k ec-256 --server letsencrypt --insecure
+bash ~/.acme.sh/acme.sh --issue --dns dns_dp -d ${ym} -k ec-256 --server letsencrypt --insecure
 fi
 if [[ $domainIP = $v6 ]]; then
-bash /root/.acme.sh/acme.sh --issue --dns dns_dp -d ${ym} -k ec-256 --server letsencrypt --listen-v6 --insecure
+bash ~/.acme.sh/acme.sh --issue --dns dns_dp -d ${ym} -k ec-256 --server letsencrypt --listen-v6 --insecure
 fi
 ;;
 3 )
@@ -208,10 +208,10 @@ export Ali_Key="$ALKEY"
 readp "请复制阿里云Aliyun的Ali_Secret：" ALSER
 export Ali_Secret="$ALSER"
 if [[ $domainIP = $v4 ]]; then
-bash /root/.acme.sh/acme.sh --issue --dns dns_ali -d ${ym} -k ec-256 --server letsencrypt --insecure
+bash ~/.acme.sh/acme.sh --issue --dns dns_ali -d ${ym} -k ec-256 --server letsencrypt --insecure
 fi
 if [[ $domainIP = $v6 ]]; then
-bash /root/.acme.sh/acme.sh --issue --dns dns_ali -d ${ym} -k ec-256 --server letsencrypt --listen-v6 --insecure
+bash ~/.acme.sh/acme.sh --issue --dns dns_ali -d ${ym} -k ec-256 --server letsencrypt --listen-v6 --insecure
 fi
 esac
 installCA
@@ -273,11 +273,11 @@ fi
 Certificate(){
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
 green "Main_Domainc下显示的域名就是已申请成功的域名证书，Renew下显示对应域名证书的自动续期时间点"
-bash /root/.acme.sh/acme.sh --list
+bash ~/.acme.sh/acme.sh --list
 #readp "请输入要撤销并删除的域名证书（复制Main_Domain下显示的域名，退出请按Ctrl+c）:" ym
-#if [[ -n $(bash /root/.acme.sh/acme.sh --list | grep $ym) ]]; then
-#bash /root/.acme.sh/acme.sh --revoke -d ${ym} --ecc
-#bash /root/.acme.sh/acme.sh --remove -d ${ym} --ecc
+#if [[ -n $(bash ~/.acme.sh/acme.sh --list | grep $ym) ]]; then
+#bash ~/.acme.sh/acme.sh --revoke -d ${ym} --ecc
+#bash ~/.acme.sh/acme.sh --remove -d ${ym} --ecc
 #rm -rf /root/ygkkkca
 #green "撤销并删除${ym}域名证书成功"
 #else
@@ -287,8 +287,8 @@ bash /root/.acme.sh/acme.sh --list
 
 
 acmeshow(){
-if [[ -n $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]]; then
-caacme1=`bash /root/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'`
+if [[ -n $(~/.acme.sh/acme.sh -v 2>/dev/null) ]]; then
+caacme1=`bash ~/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'`
 if [[ -n $caacme1 ]]; then
 caacme=$caacme1
 else
@@ -302,20 +302,20 @@ fi
 acmerenew(){
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
 green "以下显示的域名就是已申请成功的域名证书"
-bash /root/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'
+bash ~/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'
 echo
 #ab="1.无脑一键续期所有证书（推荐）\n2.选择指定的域名证书续期\n0.返回上一层\n 请选择："
 #readp "$ab" cd
 #case "$cd" in 
 #1 ) 
 green "开始续期证书…………" && sleep 3
-bash /root/.acme.sh/acme.sh --cron -f
+bash ~/.acme.sh/acme.sh --cron -f
 checktls
 #;;
 #2 ) 
 #readp "请输入要续期的域名证书（复制Main_Domain下显示的域名）:" ym
-#if [[ -n $(bash /root/.acme.sh/acme.sh --list | grep $ym) ]]; then
-#bash /root/.acme.sh/acme.sh --renew -d ${ym} --force --ecc
+#if [[ -n $(bash ~/.acme.sh/acme.sh --list | grep $ym) ]]; then
+#bash ~/.acme.sh/acme.sh --renew -d ${ym} --force --ecc
 #checktls
 #else
 #red "未找到你输入的${ym}域名证书，请自行核实！" && exit
@@ -325,13 +325,13 @@ checktls
 #esac
 }
 uninstall(){
-[[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
+[[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
 curl https://get.acme.sh | sh
-bash /root/.acme.sh/acme.sh --uninstall
+bash ~/.acme.sh/acme.sh --uninstall
 rm -rf /root/ygkkkca
 rm -rf ~/.acme.sh acme.sh
 sed -i '/--cron/d' /etc/crontab
-[[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && green "acme.sh卸载完毕" || red "acme.sh卸载失败"
+[[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]] && green "acme.sh卸载完毕" || red "acme.sh卸载失败"
 }
 start_menu(){
 clear
