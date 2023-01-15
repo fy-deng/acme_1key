@@ -100,15 +100,15 @@ green "例：原二级域名 x.ygkkk.eu.org 或 x.ygkkk.cf ，在cloudflare中�
 echo
 yellow "建议二：更换下当前本地网络IP环境，再尝试执行脚本" && exit
 }
-if [[ -f /root/ygkkkca/cert.crt && -f /root/ygkkkca/private.key ]] && [[ -s /root/ygkkkca/cert.crt && -s /root/ygkkkca/private.key ]]; then
+if [[ -f /etc/ssl/private/cert.crt && -f /etc/ssl/private/private.key ]] && [[ -s /etc/ssl/private/cert.crt && -s /etc/ssl/private/private.key ]]; then
 sed -i '/--cron/d' /etc/crontab
 echo "0 0 * * * root bash ~/.acme.sh/acme.sh --cron -f >/dev/null 2>&1" >> /etc/crontab
-green "域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /root/ygkkkca文件夹内" 
+green "域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /etc/ssl/private文件夹内" 
 yellow "公钥文件crt路径如下，可直接复制"
-green "/root/ygkkkca/cert.crt"
+green "/etc/ssl/private/cert.crt"
 yellow "密钥文件key路径如下，可直接复制"
-green "/root/ygkkkca/private.key"
-echo $ym > /root/ygkkkca/ca.log
+green "/etc/ssl/private/private.key"
+echo $ym > /etc/ssl/private/ca.log
 if [[ -f '/usr/local/bin/hysteria' ]]; then
 blue "检测到hysteria代理协议，此证书将自动应用"
 fi
@@ -127,7 +127,7 @@ fi
 }
 
 installCA(){
-bash ~/.acme.sh/acme.sh --install-cert -d ${ym} --key-file /root/ygkkkca/private.key --fullchain-file /root/ygkkkca/cert.crt --ecc
+bash ~/.acme.sh/acme.sh --install-cert -d ${ym} --key-file /etc/ssl/private/private.key --fullchain-file /etc/ssl/private/cert.crt --ecc
 }
 
 checkacmeca(){
@@ -239,7 +239,7 @@ fi
 
 acme(){
 yellow "稍等3秒，检测IP环境中"
-mkdir -p /root/ygkkkca
+mkdir -p /etc/ssl/private
 wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
@@ -278,7 +278,7 @@ bash ~/.acme.sh/acme.sh --list
 #if [[ -n $(bash ~/.acme.sh/acme.sh --list | grep $ym) ]]; then
 #bash ~/.acme.sh/acme.sh --revoke -d ${ym} --ecc
 #bash ~/.acme.sh/acme.sh --remove -d ${ym} --ecc
-#rm -rf /root/ygkkkca
+#rm -rf /etc/ssl/private
 #green "撤销并删除${ym}域名证书成功"
 #else
 #red "未找到你输入的${ym}域名证书，请自行核实！" && exit
@@ -328,7 +328,7 @@ uninstall(){
 [[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
 curl https://get.acme.sh | sh
 bash ~/.acme.sh/acme.sh --uninstall
-rm -rf /root/ygkkkca
+rm -rf /etc/ssl/private
 rm -rf ~/.acme.sh acme.sh
 sed -i '/--cron/d' /etc/crontab
 [[ -z $(~/.acme.sh/acme.sh -v 2>/dev/null) ]] && green "acme.sh卸载完毕" || red "acme.sh卸载失败"
