@@ -97,7 +97,6 @@ checktls(){
 fail(){
 red "遗憾，域名证书申请失败"
 yellow "建议一：更换下二级域名名称再尝试执行脚本（重要）"
-green "例：原二级域名 x.ygkkk.eu.org 或 x.ygkkk.cf ，在cloudflare中重命名其中的x名称，确定并生效"
 echo
 yellow "建议二：更换下当前本地网络IP环境，再尝试执行脚本" && exit
 }
@@ -158,7 +157,7 @@ checktls
 }
 
 ACMEDNS(){
-green "提示：泛域名申请前须要在解析平上设置一个名称为 * 字符的解析记录（输入格式：*.一级主域）"
+green "提示：泛域名申请前须要在解析平台上设置一个名称为 * 字符的解析记录（输入格式：*.一级主域）"
 readp "请输入解析完成的域名:" ym
 green "已输入的域名:$ym" && sleep 1
 checkacmeca
@@ -337,17 +336,6 @@ sed -i '/--cron/d' /etc/crontab
 start_menu(){
 clear
 green "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"           
-echo -e "${bblue} ░██     ░██      ░██ ██ ██         ░█${plain}█   ░██     ░██   ░██     ░█${red}█   ░██${plain}  "
-echo -e "${bblue}  ░██   ░██      ░██    ░░██${plain}        ░██  ░██      ░██  ░██${red}      ░██  ░██${plain}   "
-echo -e "${bblue}   ░██ ░██      ░██ ${plain}                ░██ ██        ░██ █${red}█        ░██ ██  ${plain}   "
-echo -e "${bblue}     ░██        ░${plain}██    ░██ ██       ░██ ██        ░█${red}█ ██        ░██ ██  ${plain}  "
-echo -e "${bblue}     ░██ ${plain}        ░██    ░░██        ░██ ░██       ░${red}██ ░██       ░██ ░██ ${plain}  "
-echo -e "${bblue}     ░█${plain}█          ░██ ██ ██         ░██  ░░${red}██     ░██  ░░██     ░██  ░░██ ${plain}  "
-green "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
-#white "甬哥Gitlab项目  ：gitlab.com/rwkgyg"
-#white "甬哥blogger博客 ：ygkkk.blogspot.com"
-#white "甬哥YouTube频道 ：www.youtube.com/c/甬哥侃侃侃kkkyg"
-yellow "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" 
 yellow " 提示："
 yellow " 一、独立80端口模式仅支持单域名证书申请，在80端口不被占用的情况下支持自动续期，"
 yellow " 二、DNS API模式不支持freenom免费域名申请，支持单域名与泛域名证书申请，无条件自动续期"
